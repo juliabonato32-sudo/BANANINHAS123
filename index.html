@@ -1,0 +1,452 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Açaí de Pijama</title>
+
+    <style>
+        :root {
+            --azul-bebe: #B9E3F8;
+            --azul-claro: #EAF7FF;
+            --azul: #55B5E8;
+            --azul-escuro: #24558A;
+            --amarelo-pastel: #FFF0A8;
+            --branco: #FFFFFF;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--azul-claro);
+            color: var(--azul-escuro);
+            margin: 0;
+            padding: 20px;
+        }
+
+        header {
+            max-width: 600px;
+            margin: 0 auto 20px;
+            padding: 25px 15px;
+            text-align: center;
+            background: var(--azul-bebe);
+            border-radius: 20px;
+        }
+
+        header h1 {
+            margin: 0 0 10px;
+            font-size: 32px;
+        }
+
+        header p {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            padding: 25px;
+            background: var(--branco);
+            border: 2px solid var(--amarelo-pastel);
+            border-radius: 20px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-top: 25px;
+        }
+
+        /* Organização das opções e alinhamento dos preços */
+        .opcao {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto 20px;
+            align-items: center;
+            column-gap: 10px;
+            padding: 14px;
+            margin: 10px 0;
+            background: var(--azul-claro);
+            border: 1px solid var(--azul-bebe);
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .opcao:hover {
+            background: var(--amarelo-pastel);
+        }
+
+        .opcao span:first-child {
+            min-width: 0;
+        }
+
+        .opcao .preco {
+            min-width: 85px;
+            text-align: right;
+            white-space: nowrap;
+            font-weight: bold;
+        }
+
+        .opcao input {
+            width: 20px;
+            height: 20px;
+            justify-self: end;
+            accent-color: var(--azul);
+            cursor: pointer;
+        }
+
+        #alerta {
+            display: none;
+            padding: 12px;
+            margin: 12px 0;
+            background: var(--amarelo-pastel);
+            border: 1px solid #E5C94F;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .total {
+            margin-top: 25px;
+            padding: 20px;
+            text-align: center;
+            background: var(--amarelo-pastel);
+            border-radius: 14px;
+        }
+
+        .total h2 {
+            margin: 0 0 10px;
+        }
+
+        #valorTotal {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            background: var(--azul);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: var(--azul-escuro);
+        }
+
+        #resultado {
+            display: none;
+            margin-top: 20px;
+            padding: 18px;
+            background: var(--azul-claro);
+            border: 2px solid var(--azul-bebe);
+            border-radius: 12px;
+            line-height: 1.7;
+            white-space: pre-line;
+            overflow-wrap: anywhere;
+        }
+
+        footer {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px 10px;
+            text-align: center;
+        }
+
+        @media (max-width: 420px) {
+            body {
+                padding: 10px;
+            }
+
+            .container {
+                padding: 12px;
+            }
+
+            header h1 {
+                font-size: 27px;
+            }
+
+            .opcao {
+                grid-template-columns: minmax(0, 1fr) auto 20px;
+                column-gap: 5px;
+                padding: 10px 8px;
+                font-size: 13px;
+            }
+
+            .opcao .preco {
+                min-width: 75px;
+                font-size: 12px;
+            }
+
+            .opcao input {
+                width: 18px;
+                height: 18px;
+                   }
+
+            #valorTotal {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>🍌 Açaí de Pijama 💙</h1>
+        <p>Monte seu açaí do jeitinho que você gosta!</p>
+    </header>
+
+    <main class="container">
+
+        <h2>💛 1. Escolha o tamanho do copo</h2>
+
+        <label class="opcao">
+            <span>Pequeno (300 ml)</span>
+            <span class="preco">R$ 12,00</span>
+            <input type="radio" name="tamanho" value="12" checked>
+        </label>
+
+        <label class="opcao">
+            <span>Médio (500 ml)</span>
+            <span class="preco">R$ 16,00</span>
+            <input type="radio" name="tamanho" value="16">
+        </label>
+
+        <label class="opcao">
+            <span>Grande (700 ml)</span>
+            <span class="preco">R$ 20,00</span>
+            <input type="radio" name="tamanho" value="20">
+        </label>
+
+        <h2>💙 2. Escolha os adicionais</h2>
+
+        <div id="alerta" role="alert"></div>
+
+        <label class="opcao">
+            <span>Leite em pó</span>
+            <span class="preco">R$ 2,00</span>
+            <input type="checkbox" value="2" data-nome="Leite em pó">
+        </label>
+
+        <label class="opcao">
+            <span>Banana</span>
+            <span class="preco">R$ 2,00</span>
+            <input type="checkbox" value="2" data-nome="Banana">
+        </label>
+
+        <label class="opcao">
+            <span>Granola</span>
+            <span class="preco">R$ 2,50</span>
+            <input type="checkbox" value="2.5" data-nome="Granola">
+        </label>
+
+        <label class="opcao">
+            <span>Leite condensado</span>
+            <span class="preco">R$ 2,50</span>
+            <input type="checkbox" value="2.5" data-nome="Leite condensado">
+        </label>
+
+        <label class="opcao">
+            <span>Morango</span>
+            <span class="preco">R$ 3,00</span>
+            <input type="checkbox" value="3" data-nome="Morango">
+        </label>
+
+        <label class="opcao">
+            <span>Paçoca</span>
+            <span class="preco">R$ 2,00</span>
+            <input type="checkbox" value="2" data-nome="Paçoca">
+        </label>
+
+        <section class="total">
+            <h2>💛 Valor total do pedido</h2>
+            <div id="valorTotal">R$ 12,00</div>
+        </section>
+
+        <button type="button" onclick="confirmarPedido()">
+            Confirmar pedido 🍇
+        </button>
+
+        <div id="resultado" role="status" aria-live="polite"></div>
+
+    </main>
+
+    <footer>
+        <p>🍌 Açaí + Bananas = Felicidade! 💛</p>
+    </footer>
+
+    <script>
+        const tamanhos = document.querySelectorAll(
+            'input[name="tamanho"]'
+        );
+
+        const adicionais = document.querySelectorAll(
+            'input[type="checkbox"]'
+        );
+
+        const valorTotal = document.getElementById("valorTotal");
+        const alerta = document.getElementById("alerta");
+        const resultado = document.getElementById("resultado");
+
+        function formatarPreco(valor) {
+            return valor.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL"
+            });
+        }
+
+        function obterLimite() {
+            const tamanho = document.querySelector(
+                'input[name="tamanho"]:checked'
+            ).value;
+
+            if (tamanho === "12") return 2;
+            if (tamanho === "16") return 4;
+
+            // O limite do copo grande não foi informado.
+            return Infinity;
+        }
+
+        function contarAdicionais() {
+            return [...adicionais].filter(
+                adicional => adicional.checked
+            ).length;
+        }
+
+        function calcularTotal() {
+            let total = Number(
+                document.querySelector(
+                    'input[name="tamanho"]:checked'
+                ).value
+            );
+
+            adicionais.forEach(function(adicional) {
+                if (adicional.checked) {
+                    total += Number(adicional.value);
+                }
+            });
+
+            valorTotal.textContent = formatarPreco(total);
+            return total;
+        }
+
+        function mostrarAlerta(mensagem) {
+            alerta.textContent = mensagem;
+            alerta.style.display = "block";
+        }
+
+        function esconderAlerta() {
+            alerta.textContent = "";
+            alerta.style.display = "none";
+        }
+
+        adicionais.forEach(function(adicional) {
+            adicional.addEventListener("change", function() {
+                const limite = obterLimite();
+
+                if (contarAdicionais() > limite) {
+                    adicional.checked = false;
+
+                    mostrarAlerta(
+                        "Ops! Este copo permite no máximo " +
+                        limite + " adicionais. Escolha menos adicionais!"
+                    );
+                } else {
+                    esconderAlerta();
+                }
+
+                resultado.style.display = "none";
+                calcularTotal();
+            });
+        });
+
+        tamanhos.forEach(function(tamanho) {
+            tamanho.addEventListener("change", function() {
+                const limite = obterLimite();
+                let quantidade = 0;
+                let removidos = 0;
+
+                adicionais.forEach(function(adicional) {
+                    if (adicional.checked) {
+                        quantidade++;
+
+                        if (quantidade > limite) {
+                            adicional.checked = false;
+                            removidos++;
+                        }
+                    }
+                });
+
+                if (removidos > 0) {
+                    mostrarAlerta(
+                        "Este copo permite até " + limite +
+                        " adicionais. " + removidos +
+                        " adicional(is) foi/foram removido(s)."
+                    );
+                } else {
+                    esconderAlerta();
+                }
+
+                resultado.style.display = "none";
+                calcularTotal();
+            });
+        });
+
+        function confirmarPedido() {
+            const tamanho = document.querySelector(
+                'input[name="tamanho"]:checked'
+            );
+
+            const nomesTamanhos = {
+                "12": "Pequeno (300 ml)",
+                "16": "Médio (500 ml)",
+                "20": "Grande (700 ml)"
+            };
+
+            const limite = obterLimite();
+
+            if (contarAdicionais() > limite) {
+                mostrarAlerta(
+                    "Você ultrapassou o limite de adicionais!"
+                );
+                return;
+            }
+
+            const escolhidos = [];
+
+            adicionais.forEach(function(adicional) {
+                if (adicional.checked) {
+                    escolhidos.push(adicional.dataset.nome);
+                }
+            });
+
+            const total = calcularTotal();
+
+            resultado.textContent =
+                "Pedido confirmado com sucesso! 💛\n\n" +
+                "Tamanho: " + nomesTamanhos[tamanho.value] +
+                "\nAdicionais: " +
+                (escolhidos.length > 0
+                    ? escolhidos.join(", ")
+                    : "Nenhum") +
+                "\nValor total: " + formatarPreco(total) +
+                "\n\nObrigado por escolher o Açaí de Pijama!";
+
+            resultado.style.display = "block";
+            esconderAlerta();
+        }
+
+        calcularTotal();
+    </script>
+
+</body>
+</html>
+
